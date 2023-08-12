@@ -12,17 +12,20 @@ typedef struct h_Model h_Model;
 struct h_Model {
 
 	/* Vertex Buffer Object, Index Buffer Object */
-	GLuint VBO, IBO;
+	GLuint VBO, EBO;
 	int shaderID;
 
-	/* OBJ Wavefront storage location. */
+	/* Coordinates of vertices, textures and normals */
 	GLfloat v[65500], vt[65500], vn[65500];
+
+	/* Indices for vertices, textures and normals */
+	GLushort f_v[65500], f_vt[65500], f_vn[65500];
 	
 	/* Size in bytes */
-	size_t v_size, vt_size, vn_size;
+	size_t v_size, vt_size, vn_size, f_v_size, f_vt_size, f_vn_size;
 
 	/* Exact number of elements, for example, one v = 3 etc... */
-	int v_count, vt_count, vn_count;
+	int v_count, vt_count, vn_count, f_v_count, f_vt_count, f_vn_count;
 
 	/* Use it with vsize() macro, model.size = vsize(model.data) */
 	int size;
