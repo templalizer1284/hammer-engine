@@ -6,7 +6,7 @@
 typedef struct h_Model {
 	Model model;
 
-	ModelAnimation *animation;
+	ModelAnimation *restrict animation;
 	int animCount;
 	int currentAnim;
 	bool animate; /* Even if model containts animation we can choose not to animate */
@@ -25,11 +25,11 @@ typedef struct h_Model {
 	Color tint;
 } h_Model;
 
-h_Model Models[1000];
+/* Pointer to an array of Models */
+h_Model *restrict Models[1000];
 int model_counter;
-bool debug;
 
-h_Model h_ModelInit(char *, bool);
+h_Model *h_ModelInit(char *, bool);
 void h_ModelDraw(h_Model *);
 void h_ModelDestroy(h_Model *);
 BoundingBox CombineBoundingBoxes(BoundingBox, BoundingBox);

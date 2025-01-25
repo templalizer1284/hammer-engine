@@ -60,14 +60,14 @@ h_MainLoop(void) {
 
 		/* Rendering models */
 		for(int i = 0; i < model_counter; i++) {
-			if(Models[i].render == true) {
-				h_ModelDraw(&Models[i]);
+			if(Models[i]->render == true) {
+				h_ModelDraw(Models[i]);
 			}
 
 			// Rendering collision boxes, debugging
 			if(debug) {
 				for(int i = 0; i < model_counter; i++) {
-					DrawBoundingBox(Models[i].transformedBox, WHITE );
+					DrawBoundingBox(Models[i]->transformedBox, WHITE );
 				}
 			}
 		}
@@ -83,35 +83,35 @@ h_MainLoop(void) {
 		}
 
 		if(IsKeyDown(default_controls->forward)) {
-			Models[0].position.x += default_controls->current_speed * sin(DEG2RAD * Models[0].angle);
-			Models[0].position.z += default_controls->current_speed * cos(DEG2RAD * Models[0].angle);
+			Models[0]->position.x += default_controls->current_speed * sin(DEG2RAD * Models[0]->angle);
+			Models[0]->position.z += default_controls->current_speed * cos(DEG2RAD * Models[0]->angle);
 		}
 
 		if(IsKeyDown(default_controls->backwards)) {
-			Models[0].position.x -= default_controls->current_speed * sin(DEG2RAD * Models[0].angle);
-			Models[0].position.z -= default_controls->current_speed * cos(DEG2RAD * Models[0].angle);
+			Models[0]->position.x -= default_controls->current_speed * sin(DEG2RAD * Models[0]->angle);
+			Models[0]->position.z -= default_controls->current_speed * cos(DEG2RAD * Models[0]->angle);
 		}
 
 		if(IsKeyDown(default_controls->strafe_left)) {
-			Models[0].position.x += default_controls->current_speed * sin(DEG2RAD * (Models[0].angle + 90.0f));
-			Models[0].position.z += default_controls->current_speed * cos(DEG2RAD * (Models[0].angle + 90.0f));
+			Models[0]->position.x += default_controls->current_speed * sin(DEG2RAD * (Models[0]->angle + 90.0f));
+			Models[0]->position.z += default_controls->current_speed * cos(DEG2RAD * (Models[0]->angle + 90.0f));
 		}
 
 		if(IsKeyDown(default_controls->strafe_right)) {
-			Models[0].position.x += default_controls->current_speed * sin(DEG2RAD * (Models[0].angle - 90.0f));
-			Models[0].position.z += default_controls->current_speed * cos(DEG2RAD * (Models[0].angle - 90.0f));
+			Models[0]->position.x += default_controls->current_speed * sin(DEG2RAD * (Models[0]->angle - 90.0f));
+			Models[0]->position.z += default_controls->current_speed * cos(DEG2RAD * (Models[0]->angle - 90.0f));
 		}
 
 		if(IsKeyDown(default_controls->turn_left)) {
-			Models[0].angle += default_controls->turn_speed;
-			Matrix rotation = MatrixRotateY(DEG2RAD * Models[0].angle);
-			Models[0].model.transform = rotation;
+			Models[0]->angle += default_controls->turn_speed;
+			Matrix rotation = MatrixRotateY(DEG2RAD * Models[0]->angle);
+			Models[0]->model.transform = rotation;
 		}
 
 		if(IsKeyDown(default_controls->turn_right)) {
-			Models[0].angle -= default_controls->turn_speed;
-			Matrix rotation = MatrixRotateY(DEG2RAD * Models[0].angle);
-			Models[0].model.transform = rotation;
+			Models[0]->angle -= default_controls->turn_speed;
+			Matrix rotation = MatrixRotateY(DEG2RAD * Models[0]->angle);
+			Models[0]->model.transform = rotation;
 		}
 
 		
@@ -141,7 +141,7 @@ h_MainLoop(void) {
 
 	/* Models */
 	for(int i = 0; i < model_counter; i++) {
-		h_ModelDestroy(&Models[i]);
+		h_ModelDestroy(Models[i]);
 	}
 
 	window.Destroy();

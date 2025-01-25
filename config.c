@@ -236,7 +236,7 @@ h_ConfigParseLogic(void) {
 	char tmp[50];
 	collisions_counter = 0;
 
-	// Initialize default controls.
+	/* Initialize default controls. */
 	static h_Control c = {
 		0.0f, 0.07f, 0.13f, KEY_W,
 		KEY_S, KEY_LEFT, KEY_RIGHT, KEY_A,
@@ -264,8 +264,8 @@ h_ConfigParseLogic(void) {
 			fscanf(fp, "%f %f %f", &x, &y, &z);
 
 			for(int i = 0; i < model_counter; i++) {
-				if(strcmp(Models[i].name, tmp) == 0) {
-					h_Vec3Mod(&Models[i].position, (Vector3) { x, y, z });
+				if(strcmp(Models[i]->name, tmp) == 0) {
+					h_Vec3Mod(&Models[i]->position, (Vector3) { x, y, z });
 				}
 			}
 		}
@@ -281,8 +281,8 @@ h_ConfigParseLogic(void) {
 			for(int i = 0; i < model_counter; i++) {
 
 				// When found, place in array.
-				if(strcmp(Models[i].name, tmp) == 0) {
-					collisions[collisions_counter].first_model = &Models[i];
+				if(strcmp(Models[i]->name, tmp) == 0) {
+					collisions[collisions_counter].first_model = Models[i];
 				}
 			}
 
@@ -293,8 +293,8 @@ h_ConfigParseLogic(void) {
 			for(int i = 0; i < model_counter; i++) {
 
 				// When found, place in array.
-				if(strcmp(Models[i].name, tmp) == 0) {
-					collisions[collisions_counter].second_model = &Models[i];
+				if(strcmp(Models[i]->name, tmp) == 0) {
+					collisions[collisions_counter].second_model = Models[i];
 				}
 			}
 

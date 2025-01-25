@@ -3,6 +3,7 @@
 
 #include "hammer.h"
 #include "util.h"
+#include "model.h"
 
 enum COLLISION_ACTIONS {
 
@@ -49,12 +50,19 @@ typedef struct h_Collisions {
 	char text_data[100];
 } h_Collisions;
 
-h_Level *current_level; /* Pointer to a level that player has interaction in real time. */
+/* Pointer to a level that player has interaction in real time. */
+h_Level *current_level;
+
+/* Main config file */
 h_Config cfg;
+
+/* To render fps, grid and bounding boxes */
 bool debug;
+
+/* Like its said, default controls */
 h_Control *default_controls;
 
-// Up to 50 collision detections for now.
+/* Up to 50 collision detections for now. */
 h_Collisions collisions[50];
 int collisions_counter;
 

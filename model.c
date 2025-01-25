@@ -1,39 +1,37 @@
 #include "model.h"
 
 h_Model
-h_ModelInit(char *file, bool animation) {
-	h_Model model;
-	
-	model.position = (Vector3) { 0.0f, 0.0f, 0.0f };
+*h_ModelInit(char *file, bool animation) {
+	h_Model *model = malloc(sizeof(h_Model) * 1);
 
-	model.render = true;
+	model->render = true;
 
-	model.scale = 1.0f;
-	model.tint = WHITE;
-	model.angle = 0.0f;
+	model->scale = 1.0f;
+	model->tint = WHITE;
+	model->angle = 0.0f;
 	
-	model.model = LoadModel(file);
-	model.name = strdup(basename(file));
+	model->model = LoadModel(file);
+	model->name = strdup(basename(file));
 
 	// Automatic bounding box generation
-	model.box = GetMeshBoundingBox(model.model.meshes[0]); // Get the bounding box for the first mesh
+	model->box = GetMeshBoundingBox(model->model.meshes[0]); // Get the bounding box for the first mesh
 
 	// If there are multiple meshes, combine their bounding boxes
-	for (int i = 1; i < model.model.meshCount; i++) {
-		BoundingBox currentBox = GetMeshBoundingBox(model.model.meshes[i]);
-		model.box = CombineBoundingBoxes(model.box, currentBox);
+	for (int i = 1; i < model->model.meshCount; i++) {
+		BoundingBox currentBox = GetMeshBoundingBox(model->model.meshes[i]);
+		model->box = CombineBoundingBoxes(model->box, currentBox);
 	}
 		
-	model.animCount = 0;
-	model.currentAnim = 0;
-	model.animate = true;
+	model->animCount = 0;
+	model->currentAnim = 0;
+	model->animate = true;
 
 	if(animation == true) {
-		model.animation = LoadModelAnimations(file, &model.animCount);
+		model->animation = LoadModelAnimations(file, &model->animCount);
 	}
 
 	else {
-		model.animation = NULL;
+		model->animation = NULL;
 	}
 
 	return model;
