@@ -1,0 +1,70 @@
+There are four types of config files, hammercfg, root.cfg, cfg.resources and cfg.logic
+
+/************
+ * HAMMERCFG
+ ************/
+Has basic information about game window and base game to be used.
+Instruction are made from component,property and value.
+
+Components:
+window - properties - width,height,mode.
+Example:
+window width 640
+window height 480
+window mode 0
+This will run game in 640x480 res windowed.
+
+base - points to folder inside engine folder that contains game files.
+Example: base Demo 0 - basically looks for root.cfg inside Demo that folder to verify files.
+
+Properties:
+width,height - put there the resolution in pixels.
+mode - if 0 then the game is windowed, 1 means full screen.
+
+/************
+ * ROOT.CFG
+ ************/
+This config file defines following things:
+- Game name
+- Debugging options
+- Starting level of the game
+
+/****************
+ * CFG.RESOURCES
+ ****************/
+This file along with its .logic buddy tells every detail about the level.
+Resources config file only defines following things:
+
+- Name of the level /* Its required because of internal identification */
+- Hero and Map entity file, every Hammer derivative required level to have at least hero and model.
+- Entities, literally everything else except first two models, hero and map.
+
+NAME LevelName Defines name of the level
+
+HERO hero_file
+MAP map_file Note that you should put files inside media folder located in base folder.
+	     Example: HERO hero.gltf will look in base/media/hero.gltf
+
+ENTITY type Entities are basically NPCs, Objects etc...
+	TYPE types list
+	STATIC - as name says, its static entity that renders object that basically does nothing.
+	Example: ENTITY STATIC wall.glb
+
+/************
+ * CFG.LOGIC
+ ************/
+This file defines following things:
+
+- Position of entities(optional, changes initial position)
+- Collision detection between entities and action on collision
+
+POSITION entity_file x y z Command that changes initial position of model.
+	Example: POSITION hero.glb 5.0 5.0 0.0
+	Be sure to use floating point numbers.
+
+COLLISION entity_one entity_two ACTION arguments(optional)
+	Example: COLLISION hero.glb enemy.glb PRINT collided
+	This is literraly print message to stdout "collided"
+
+Actions list:
+	- PRINT arg - One argument, prints message to stdout.

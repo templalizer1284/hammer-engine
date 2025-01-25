@@ -1,0 +1,11 @@
+*~
+*.o
+*.out
+*.iqm
+*.obj
+*.glb
+*.gltf
+hammercfg
+hammer_debug*
+test
+test/*
