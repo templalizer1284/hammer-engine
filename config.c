@@ -2,9 +2,10 @@
 
 h_Config
 h_ConfigInit(void) {
-	h_Config cfg;
 	
 	FILE *fp = fopen("hammercfg", "r");
+
+	bool base = false;
 
 	/* If file doesn't exist create new one with default settings. */
 	if(access("hammercfg", F_OK) != 0) {
@@ -49,9 +50,16 @@ h_ConfigInit(void) {
 				/* Taking path for base. */
 				(void)strcpy(cfg.base, property);
 
+				base = true;
+				
 				/* Parse root cfg */
 				h_ConfigParseBase(&cfg);
 			}
+		}
+
+		if(base == false) {
+			perror("Base files not present or corrupted.\n");
+			_Exit(1);
 		}
 
 		fclose(fp);
@@ -83,7 +91,6 @@ h_ConfigParseBase(h_Config *cfg) {
 		fp = fopen(root_config, "r");
 		
 		printf("Found base: %s\n", cfg->base);
-		(void)strcat(base, cfg->base);
 
 		char tmp[50];
 
@@ -119,7 +126,7 @@ h_ConfigParseBase(h_Config *cfg) {
 					printf("Starting level '%s'.\n", tmp);
 
 					/* Parsing level stuff */
-					h_ConfigParseLevel(fpp, cfg);
+					h_ConfigParseLevel(fpp);
 				}
 			}
 		}
@@ -131,7 +138,7 @@ h_ConfigParseBase(h_Config *cfg) {
 
 /* This function reads settings and assets for one particular level. */
 void
-h_ConfigParseLevel(FILE *fp, h_Config *cfg) {
+h_ConfigParseLevel(FILE *fp) {
 
 	char tmp[50];
 
@@ -151,7 +158,7 @@ h_ConfigParseLevel(FILE *fp, h_Config *cfg) {
 		if(strcmp(tmp, "HERO") == 0) {
 			fscanf(fp, "%s", tmp);
 
-			(void)strcat(level.hero, cfg->base);
+			(void)strcat(level.hero, cfg.base);
 			(void)strcat(level.hero, SEP);
 			(void)strcat(level.hero, "media/");
 			(void)strcat(level.hero, tmp);
@@ -169,7 +176,7 @@ h_ConfigParseLevel(FILE *fp, h_Config *cfg) {
 		if(strcmp(tmp, "MAP") == 0) {
 			fscanf(fp, "%s", tmp);
 
-			(void)strcat(level.map, cfg->base);
+			(void)strcat(level.map, cfg.base);
 			(void)strcat(level.map, SEP);
 			(void)strcat(level.map, "media");
 			(void)strcat(level.map, SEP);
@@ -193,16 +200,12 @@ h_ConfigParseLevel(FILE *fp, h_Config *cfg) {
 				/* Read the file */
 				fscanf(fp, "%s", tmp);
 
-				char entity_path[100] = "";
-				(void)strcat(entity_path, cfg->base);
-				(void)strcat(entity_path, SEP);
-				(void)strcat(entity_path, "media");
-				(void)strcat(entity_path, SEP);
-				(void)strcat(entity_path, tmp);
+				h_String entity_path = h_NewString(cfg.base);
+				h_ConcatString(&entity_path, 4, SEP, "media", SEP, tmp);
 
-				if(access(entity_path, F_OK) == 0) {
+				if(access(entity_path.text, F_OK) == 0) {
 					// pass ok
-					(void)strcpy(level.entities[entity_count], entity_path);
+					(void)strcpy(level.entities[entity_count], entity_path.text);
 					entity_count++;
 				} else {
 					perror("Entity file doesn't exist.\n");
@@ -242,15 +245,15 @@ h_ConfigParseLogic(void) {
 
 	default_controls = &c;
 
-	char path[50] = "";
-	(void)strcat(path, base);
+	h_String log_path = h_NewString(cfg.base);
+	h_ConcatString(&log_path, 6, SEP, "levels", SEP, current_level->level_name, SEP, "cfg.logic");
 
-	if(access("test/levels/LevelOne/cfg.logic", F_OK) != 0) {
+	if(access(log_path.text, F_OK) != 0) {
 		perror("Cannot open config logic file, base corrupted.\n");
 		_Exit(1);
 	}
-
-	fp = fopen("test/levels/LevelOne/cfg.logic", "r");
+	
+	fp = fopen(log_path.text, "r");
 	while(fscanf(fp, "%s", tmp) != EOF) {
 	
 		if(strcmp(tmp, "POSITION") == 0) {
@@ -314,6 +317,7 @@ h_ConfigParseLogic(void) {
 		}
 	}
 
+	h_DestroyString(&log_path);
 	fclose(fp);
 }
 

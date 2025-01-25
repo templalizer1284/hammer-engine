@@ -49,10 +49,10 @@ typedef struct h_Collisions {
 	char text_data[100];
 } h_Collisions;
 
-h_Level *restrict current_level; /* Pointer to a level that player has interaction in real time. */
-static char base[20] = "";
+h_Level *current_level; /* Pointer to a level that player has interaction in real time. */
+h_Config cfg;
 bool debug;
-h_Control *restrict default_controls;
+h_Control *default_controls;
 
 // Up to 50 collision detections for now.
 h_Collisions collisions[50];
@@ -60,7 +60,7 @@ int collisions_counter;
 
 h_Config h_ConfigInit(void);
 void h_ConfigParseBase(h_Config *);
-void h_ConfigParseLevel(FILE *, h_Config *);
+void h_ConfigParseLevel(FILE *);
 void h_ConfigParseLogic(void);
 void h_ConfigWrite(void);
 void h_LevelDestroy(h_Level *);
